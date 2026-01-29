@@ -1,19 +1,21 @@
 import os
+
 from dotenv import load_dotenv
+
+load_dotenv()
+
 from pathlib import Path
 
 # -------------------------------
 # Base directory
 # -------------------------------
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 # -------------------------------
 # Security
 # -------------------------------
 SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = os.getenv('DEBUG') == 'True'
-ALLOWED_HOSTS = [os.getenv('ALLOWED_HOSTS')]
-
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', "").split(",")
 # -------------------------------
 # Applications
 # -------------------------------
@@ -51,7 +53,6 @@ MIDDLEWARE = [
 
 CORS_ALLOW_ALL_ORIGINS = True
 
-
 # -------------------------------
 # URLs and WSGI
 # -------------------------------
@@ -80,7 +81,6 @@ TEMPLATES = [
 # Database (SQLite)
 # -------------------------------
 
-load_dotenv()
 
 DATABASES = {
     'default': {
