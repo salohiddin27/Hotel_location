@@ -141,6 +141,7 @@ SPECTACULAR_SETTINGS = {
 }
 
 # settings.py
-CSRF_TRUSTED_ORIGINS = [
-    'https://berniece-unincluded-liane.ngrok-free.dev',
-]
+CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED_ORIGINS', "").split(",")
+
+if not CSRF_TRUSTED_ORIGINS or CSRF_TRUSTED_ORIGINS == [""]:
+    CSRF_TRUSTED_ORIGINS = ['https://hotellocation-production.up.railway.app']
