@@ -1,4 +1,5 @@
 import os
+from dotenv import load_dotenv
 from pathlib import Path
 
 # -------------------------------
@@ -9,9 +10,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # -------------------------------
 # Security
 # -------------------------------
-SECRET_KEY = 'django-insecure-s)dynxv&m7!4j8eap($rm^quqda&_9&d+%8prpo^0_eaku!1=t'
-DEBUG = True
-ALLOWED_HOSTS = ["*"]
+SECRET_KEY = os.getenv('SECRET_KEY')
+DEBUG = os.getenv('DEBUG') == 'True'
+ALLOWED_HOSTS = [os.getenv('ALLOWED_HOSTS')]
 
 # -------------------------------
 # Applications
@@ -78,14 +79,17 @@ TEMPLATES = [
 # -------------------------------
 # Database (SQLite)
 # -------------------------------
+
+load_dotenv()
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'hotel_db',
-        'USER': 'postgres',
-        'PASSWORD': '1',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'NAME': os.getenv('DB_NAME'),
+        'USER': os.getenv('DB_USER'),
+        'PASSWORD': os.getenv('DB_PASSWORD'),
+        'HOST': os.getenv('DB_HOST'),
+        'PORT': os.getenv('DB_PORT'),
     }
 }
 
