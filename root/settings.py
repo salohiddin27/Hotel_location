@@ -1,21 +1,21 @@
 import os
-
+from pathlib import Path
 from dotenv import load_dotenv
 
 load_dotenv()
-
-from pathlib import Path
 
 # -------------------------------
 # Base directory
 # -------------------------------
 BASE_DIR = Path(__file__).resolve().parent.parent
+
 # -------------------------------
 # Security
 # -------------------------------
-SECRET_KEY = os.getenv('SECRET_KEY')
+SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-default-key')
 DEBUG = os.getenv('DEBUG') == 'True'
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', "").split(",")
+
 # -------------------------------
 # Applications
 # -------------------------------
@@ -42,13 +42,14 @@ INSTALLED_APPS = [
 # -------------------------------
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # Dizayn chiqishi uchun muhim
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    "corsheaders.middleware.CorsMiddleware",
 ]
 
 CORS_ALLOW_ALL_ORIGINS = True
@@ -78,10 +79,8 @@ TEMPLATES = [
 ]
 
 # -------------------------------
-# Database (SQLite)
+# Database (PostgreSQL)
 # -------------------------------
-
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -112,36 +111,36 @@ USE_I18N = True
 USE_TZ = True
 
 # -------------------------------
-# Static files (CSS, JS, etc.)
+# Static files (Whitenoise sozlamalari bilan)
 # -------------------------------
 STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
-STATIC_ROOT = BASE_DIR / "staticfiles"  # collectstatic qilinganda fayllar shu yerga tushadi
+# Productionda dizayn fayllarini siqib ko'rsatish
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # -------------------------------
-# Media files (rasmlar, fayllar)
+# Media files
 # -------------------------------
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / "media"
 
 # -------------------------------
-# Django REST Framework
+# Django REST Framework & Spectacular
 # -------------------------------
 REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 
-# -------------------------------
-# drf-spectacular (API dokumentatsiya)
-# -------------------------------
 SPECTACULAR_SETTINGS = {
-    'TITLE': 'Hotel Location',
-    'DESCRIPTION': 'Foydalanish uchun juda qulay',
+    'TITLE': 'Hotel Location API',
+    'DESCRIPTION': 'Foydalanish uchun qulay API',
     'VERSION': '1.0.0',
 }
 
-# settings.py
+# -------------------------------
+# CSRF Trusted Origins (Railway uchun)
+# -------------------------------
 CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED_ORIGINS', "").split(",")
-
 if not CSRF_TRUSTED_ORIGINS or CSRF_TRUSTED_ORIGINS == [""]:
     CSRF_TRUSTED_ORIGINS = ['https://hotellocation-production.up.railway.app']
