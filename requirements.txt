@@ -8,3 +8,4 @@ django-filter
 drf-spectacular
 django-cors-headers
 python-dotenv
+Pillow
