@@ -14,7 +14,6 @@
         :root { --primary-blue: #2563eb; --dark-slate: #1e293b; --success-green: #10b981; --accent-gold: #f59e0b; }
         body { font-family: 'Outfit', sans-serif; background-color: #f8fafc; color: #334155; scroll-behavior: smooth; }
 
-        /* Hero Design */
         .hero {
             background: linear-gradient(rgba(30, 41, 59, 0.8), rgba(30, 41, 59, 0.9)), url('https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1920&q=80');
             background-size: cover; background-position: center;
@@ -22,39 +21,66 @@
         }
 
         .search-container { max-width: 650px; margin: -45px auto 40px; position: relative; z-index: 100; }
-        .search-input {
-            border-radius: 100px; padding: 22px 30px 22px 65px; border: none;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.15); width: 100%; font-size: 1.15rem; transition: 0.3s;
-        }
-        .search-input:focus { outline: none; transform: scale(1.02); box-shadow: 0 25px 50px rgba(0,0,0,0.2); }
+        .search-input { border-radius: 100px; padding: 22px 30px 22px 65px; border: none; box-shadow: 0 20px 40px rgba(0,0,0,0.15); width: 100%; font-size: 1.15rem; transition: 0.3s; }
         .search-icon { position: absolute; left: 28px; top: 50%; transform: translateY(-50%); color: var(--primary-blue); font-size: 1.4rem; }
 
-        /* Region Cards */
-        .region-card {
-            position: relative; height: 350px; border-radius: 30px;
-            overflow: hidden; cursor: pointer; transition: 0.5s ease; border: none;
-        }
-        .region-card:hover { transform: translateY(-15px); }
-        .region-card img { width: 100%; height: 100%; object-fit: cover; transition: 0.8s; }
-        .region-card:hover img { transform: scale(1.15); filter: brightness(0.7); }
-        .region-overlay {
-            position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.95) 5%, transparent 60%);
-            display: flex; flex-direction: column; justify-content: flex-end; padding: 30px; color: white;
-        }
+        .region-card, .hotel-card { border-radius: 30px; overflow: hidden; cursor: pointer; transition: 0.4s ease; border: none; background: white; height: 100%; }
+        .region-card:hover, .hotel-card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+        .region-card img, .hotel-img { width: 100%; height: 350px; object-fit: cover; transition: 0.8s; }
+        .region-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.9) 5%, transparent 60%); display: flex; flex-direction: column; justify-content: flex-end; padding: 30px; color: white; }
 
-        /* Hotel Details */
-        .hotel-card { border-radius: 30px; border: none; background: white; box-shadow: 0 15px 35px rgba(0,0,0,0.05); transition: 0.4s; height: 100%; }
-        .hotel-img-wrapper { position: relative; height: 260px; overflow: hidden; border-radius: 30px 30px 0 0; }
-        .hotel-img { width: 100%; height: 100%; object-fit: cover; }
+        .hotel-img-wrapper { position: relative; height: 260px; overflow: hidden; }
+        .hotel-img { height: 100%; }
         .rating-badge { position: absolute; bottom: 15px; right: 15px; background: white; padding: 5px 12px; border-radius: 50px; font-weight: 700; color: #1e293b; }
-        .amenity-tag { background: #f1f5f9; color: #64748b; padding: 6px 14px; border-radius: 50px; font-size: 0.85rem; font-weight: 500; }
-
-        /* Booking Summary */
-        .booking-summary { background: #eff6ff; border: 2px dashed #bfdbfe; border-radius: 15px; padding: 20px; margin-top: 15px; }
 
         .hidden { display: none !important; }
-        .w-fit-content { width: fit-content; }
-        footer { background: var(--dark-slate); color: #94a3b8; padding: 60px 0 30px; margin-top: 100px; }
+
+        .modal-content { border-radius: 30px; border: none; }
+        .modal-carousel-img { height: 450px; object-fit: cover; width: 100%; }
+        .amenity-pill { background: #f1f5f9; border-radius: 15px; padding: 10px 15px; display: inline-flex; align-items: center; gap: 10px; margin-bottom: 10px; transition: 0.3s; }
+        .amenity-pill:hover { background: #e2e8f0; }
+        .amenity-pill i { color: var(--primary-blue); }
+
+        .booking-summary { background: #eff6ff; border: 2px dashed #bfdbfe; border-radius: 15px; padding: 20px; margin-top: 15px; }
+
+        .hotel-search-inner { border-radius: 50px; border: 1px solid #e2e8f0; padding: 10px 20px 10px 45px; width: 100%; }
+        .hotel-search-icon { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: var(--primary-blue); }
+
+        .carousel-control-prev, .carousel-control-next { width: 12%; filter: drop-shadow(0 0 5px rgba(0,0,0,0.5)); }
+
+        .success-card {
+            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.9);
+            z-index: 9999; background: white; padding: 50px 40px; border-radius: 40px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.25); text-align: center;
+            max-width: 500px; width: 95%; opacity: 0; visibility: hidden;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .success-card.active { opacity: 1; visibility: visible; transform: translate(-50%, -50%) scale(1); }
+
+        .check-container {
+            width: 100px; height: 100px; background: #ecfdf5; color: #10b981;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-size: 50px; margin: 0 auto 25px;
+            animation: pulse-green 2s infinite;
+        }
+
+        @keyframes pulse-green {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 20px rgba(16, 185, 129, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+        }
+
+        .step-item {
+            display: flex; align-items: center; gap: 15px; text-align: left;
+            background: #f8fafc; padding: 15px 20px; border-radius: 20px; margin-bottom: 12px;
+            border: 1px solid #e2e8f0;
+        }
+        .step-number {
+            width: 32px; height: 32px; background: var(--primary-blue); color: white;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-weight: bold; font-size: 14px; flex-shrink: 0;
+        }
     </style>
 </head>
 <body>
@@ -66,240 +92,375 @@
         </div>
     </div>
 
-    <div class="container search-container" id="searchWrapper" data-aos="zoom-in">
+    <div class="container search-container" id="searchWrapper">
         <i class="fas fa-search search-icon"></i>
-        <input type="text" id="regionSearch" class="search-input" placeholder="Qaysi viloyat yoki shaharni qidiryapsiz?" onkeyup="filterRegions()">
+        <input type="text" id="regionSearch" class="search-input" placeholder="Qaysi viloyatni qidiryapsiz?" onkeyup="filterRegions()">
     </div>
 
     <div class="container my-5">
-
         <div id="rSection">
             <h3 class="fw-bold mb-4"><i class="fas fa-map-marked-alt text-primary me-2"></i> Viloyatni tanlang</h3>
             <div class="row g-4" id="regionGrid">
                 {% for region in regions %}
                 <div class="col-lg-4 col-md-6 region-item" data-name="{{ region.name|lower }}">
                     <div class="card region-card shadow-lg" onclick="openHotels('region-{{ region.id }}', '{{ region.name }}')">
-                        {% if region.image %}
-                            <img src="{{ region.image.url }}" alt="{{ region.name }}">
-                        {% else %}
-                            <img src="https://via.placeholder.com/800x600?text={{ region.name }}" alt="Placeholder">
-                        {% endif %}
+                        <img src="{{ region.image.url|default:'https://via.placeholder.com/800x600' }}" alt="{{ region.name }}">
                         <div class="region-overlay">
-                            <span class="badge bg-primary mb-2 w-fit-content">Kashf eting</span>
                             <h2 class="fw-bold m-0">{{ region.name }}</h2>
-                            <p class="mb-0 opacity-75 small">
-                                <i class="fas fa-hotel me-1"></i> {{ region.districts.count }} ta mehmonxona mavjud
-                            </p>
+                            <p class="mb-0 opacity-75 small"><i class="fas fa-hotel me-1"></i> {{ region.districts.count }} ta maskun</p>
                         </div>
                     </div>
                 </div>
-                {% empty %}
-                <div class="col-12 text-center py-5">
-                    <p class="lead text-muted">Hozircha viloyatlar qo'shilmagan.</p>
-                </div>
                 {% endfor %}
-            </div>
-            <div id="noRegion" class="text-center py-5 hidden">
-                <p class="lead">Bunday shahar topilmadi...</p>
             </div>
         </div>
 
         <div id="hSection" class="hidden">
-            <div class="d-flex justify-content-between align-items-center mb-5 pb-4 border-bottom">
-                <div>
-                    <span class="text-primary fw-bold text-uppercase small">Viloyat Mehmonxonalari</span>
-                    <h2 class="fw-bold text-dark mt-1" id="hTitle"></h2>
+            <div class="row align-items-center mb-5 pb-4 border-bottom g-3">
+                <div class="col-md-4">
+                    <h2 class="fw-bold text-dark m-0" id="hTitle"></h2>
                 </div>
-                <button class="btn btn-dark rounded-pill px-4 fw-bold" onclick="closeHotels()">
-                    <i class="fas fa-chevron-left me-2"></i> Orqaga
-                </button>
+
+                <div class="col-md-5">
+                    <div class="position-relative">
+                        <i class="fas fa-search hotel-search-icon"></i>
+                        <input type="text" id="hotelSearch" class="hotel-search-inner" placeholder="Maskun nomini qidiring..." onkeyup="filterHotels()">
+                    </div>
+                </div>
+
+                <div class="col-md-3 text-md-end">
+                    <button class="btn btn-dark rounded-pill px-4" onclick="closeHotels()">
+                        <i class="fas fa-arrow-left me-2"></i> Orqaga
+                    </button>
+                </div>
             </div>
 
             <div class="row g-4" id="hotelGrid">
                 {% for district in districts %}
-                <div class="col-lg-4 col-md-6 h-item" data-rid="region-{{ district.region.id }}">
-                    <div class="card hotel-card">
+                <div class="col-lg-4 col-md-6 h-item" data-rid="region-{{ district.region.id }}" data-hname="{{ district.name|lower }}">
+                    <div class="card hotel-card shadow-sm" onclick="openHotelDetails('{{ district.id }}')">
                         <div class="hotel-img-wrapper">
-                            <span class="badge bg-warning text-dark position-absolute top-0 start-0 m-3 rounded-pill fw-bold px-3 py-1" style="z-index: 2;">
-                                Premium
-                            </span>
-                            {% with district.images.all|first as first_image %}
-                                <img src="{{ first_image.image.url|default:'https://via.placeholder.com/800x600?text=No+Photo' }}" class="hotel-img" alt="{{ district.name }}">
+                            {% with district.images.all|first as first_img %}
+                            <img src="{{ first_img.image.url|default:'https://via.placeholder.com/800x600' }}" class="hotel-img">
                             {% endwith %}
-                            <div class="rating-badge">
-                                <i class="fas fa-star text-warning"></i> {{ district.average_rating|default:"0.0" }}
-                            </div>
+                            <div class="rating-badge"><i class="fas fa-star text-warning"></i> {{ district.average_rating|default:"5.0" }}</div>
                         </div>
                         <div class="card-body p-4">
-                            <h4 class="fw-bold mb-3">{{ district.name }}</h4>
-                            <div class="d-flex flex-wrap gap-2 mb-4">
-                                {% for amenity in district.amenities.all %}
-                                    <span class="amenity-tag">
-                                        <i class="fas fa-{{ amenity.icon|default:'check' }}"></i> {{ amenity.name }}
-                                    </span>
-                                {% endfor %}
+                            <h4 class="fw-bold mb-2">{{ district.name }}</h4>
+                            <p class="text-muted small mb-3"><i class="fas fa-map-marker-alt me-1"></i> Batafsil ko'rish uchun bosing</p>
+                            <div class="d-flex justify-content-between align-items-center pt-3 border-top">
+                                <span class="h4 fw-bold text-success mb-0">${{ district.price_per_night }}</span>
+                                <span class="btn btn-primary rounded-pill">Ko'rish</span>
                             </div>
-                            <div class="d-flex justify-content-between align-items-center border-top pt-3">
-                                <div>
-                                    <span class="h3 fw-bold text-success mb-0">${{ district.price_per_night }}</span>
-                                    <small class="text-muted d-block">1 kecha / 1 kishi</small>
+                        </div>
+                    </div>
+
+                    <div id="data-{{ district.id }}" class="hidden"
+                         data-name="{{ district.name }}"
+                         data-price="{{ district.price_per_night }}"
+                         data-lat="{{ district.latitude }}"
+                         data-lng="{{ district.longitude }}">
+                         <div class="desc-content">
+                             {% for desc in district.descriptions.all %}
+                                <div class="mb-2"><strong>{{ desc.key }}:</strong> {{ desc.value }}</div>
+                             {% endfor %}
+                         </div>
+                         <div class="amenities-list">
+                             {% for amenity in district.amenities.all %}
+                                <div class="amenity-pill">
+                                    <i class="fas fa-{{ amenity.icon|default:'check-circle' }}"></i>
+                                    <span>{{ amenity.name }}</span>
                                 </div>
-                                <button class="btn btn-primary px-4 rounded-pill fw-bold"
-                                        onclick="openBooking('{{ district.name }}', '{{ district.price_per_night }}')">
-                                    Band qilish
-                                </button>
+                             {% endfor %}
+                         </div>
+                         <div class="img-list">
+                             {% for img in district.images.all %}
+                                <span class="d-block">{{ img.image.url }}</span>
+                             {% endfor %}
+                         </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="detailModal" tabindex="-1">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content overflow-hidden">
+                <div class="row g-0">
+                    <div class="col-lg-7">
+                        <div id="detailCarousel" class="carousel slide" data-bs-interval="false">
+                            <div class="carousel-inner" id="modalImages"></div>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#detailCarousel" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon"></span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#detailCarousel" data-bs-slide="next">
+                                <span class="carousel-control-next-icon"></span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-lg-5">
+                        <div class="p-4 h-100 d-flex flex-column">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <h2 class="fw-bold mb-1" id="detailName"></h2>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="overflow-auto my-4" style="max-height: 400px;">
+                                <h6 class="text-uppercase fw-bold small text-primary">Tavsif va Ma'lumotlar</h6>
+                                <div id="detailDesc" class="mb-4 text-muted"></div>
+                                <h6 class="text-uppercase fw-bold small text-primary">Qulayliklar</h6>
+                                <div id="modalAmenities" class="d-flex flex-wrap gap-2 mb-4"></div>
+                                <h6 class="text-uppercase fw-bold small text-primary">Manzil</h6>
+                                <div class="bg-light p-3 rounded-3">
+                                    <i class="fas fa-map-marked-alt me-2"></i>
+                                    <a id="detailMapLink" href="#" target="_blank" class="text-decoration-none">Google Maps orqali ko'rish</a>
+                                </div>
+                            </div>
+                            <div class="mt-auto pt-4 border-top">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <small class="text-muted d-block">Bir kecha uchun:</small>
+                                        <h3 class="text-success fw-bold m-0" id="detailPrice"></h3>
+                                    </div>
+                                    <button class="btn btn-primary btn-lg rounded-pill px-5" id="bookBtn">Bron qilish</button>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                {% endfor %}
             </div>
         </div>
     </div>
 
     <div class="modal fade" id="bookingModal" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
-                <div class="modal-header bg-dark text-white p-4">
-                    <h4 class="fw-bold mb-0" id="modalHotelName"></h4>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            <div class="modal-content p-4">
+                <div class="modal-header border-0">
+                    <h4 class="fw-bold" id="modalHotelName"></h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
-                <div class="modal-body p-4">
+                <div class="modal-body">
                     <div class="row g-3">
-                        <div class="col-md-6">
-                            <label class="form-label small fw-bold">Kelish sanasi</label>
-                            <input type="date" id="checkIn" class="form-control" onchange="calculate()">
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label small fw-bold">Ketish sanasi</label>
-                            <input type="date" id="checkOut" class="form-control" onchange="calculate()">
-                        </div>
+                        <div class="col-6"><label class="fw-bold small">Kelish</label><input type="date" id="checkIn" class="form-control rounded-3" onchange="calculate()"></div>
+                        <div class="col-6"><label class="fw-bold small">Ketish</label><input type="date" id="checkOut" class="form-control rounded-3" onchange="calculate()"></div>
                         <div class="col-12">
-                            <label class="form-label small fw-bold">Mehmonlar soni</label>
-                            <select id="guestCount" class="form-select" onchange="calculate()">
+                            <label class="fw-bold small">Mehmonlar soni</label>
+                            <select id="guestCount" class="form-select rounded-3">
                                 <option value="1">1 kishi</option>
                                 <option value="2">2 kishi</option>
                                 <option value="3">3 kishi</option>
                                 <option value="4">4 kishi</option>
+                                <option value="5">5+ kishi</option>
                             </select>
                         </div>
                     </div>
-
-                    <div id="resultBox" class="booking-summary hidden" data-aos="fade-in">
-                        <div class="d-flex justify-content-between mb-2">
-                            <span>Sayohat davomiyligi:</span>
-                            <span class="fw-bold"><span id="daysSpan">0</span> kecha</span>
+                    <div id="resultBox" class="booking-summary hidden">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="text-muted">Muddati:</span>
+                            <span class="fw-bold" id="nightCount">0 kecha</span>
                         </div>
-                        <div class="d-flex justify-content-between mb-2">
-                            <span>Bir kecha uchun narx:</span>
-                            <span class="fw-bold" id="unitPriceDisplay">$0</span>
-                        </div>
-                        <hr>
-                        <div class="d-flex justify-content-between h4 fw-bold text-primary mb-0">
-                            <span>Umumiy summa:</span>
+                        <div class="d-flex justify-content-between h5 fw-bold text-primary">
+                            <span>Jami summa:</span>
                             <span id="totalSpan">$0</span>
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer border-0 p-4">
-                    <button class="btn btn-success w-100 py-3 rounded-pill fw-bold shadow-sm" onclick="confirmBooking()">
-                        BRON QILISHNI TASDIQLASH
-                    </button>
-                </div>
+                <button class="btn btn-success btn-lg w-100 rounded-pill mt-3 fw-bold" onclick="confirmBooking()">TASDIQLASH</button>
             </div>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script>
-        AOS.init({ duration: 800, once: true });
-        let currentPricePerNight = 0;
+    <div id="successOverlay" class="hidden" style="position: fixed; inset: 0; background: rgba(15, 23, 42, 0.75); z-index: 9998; backdrop-filter: blur(8px);"></div>
+    <div id="successCard" class="success-card">
+        <div class="check-container">
+            <i class="fas fa-check"></i>
+        </div>
+        <h2 class="fw-bold mb-2" style="color: #1e293b;">Muvaffaqiyatli Band Qilindi!</h2>
+        <p class="text-muted mb-4">Dam olishingiz biz bilan unutilmas bo'ladi. Keyingi qadamlar:</p>
 
-        // Qidiruv funksiyasi
+        <div class="mb-4">
+            <div class="step-item">
+                <div class="step-number">1</div>
+                <div class="small"><b>Tizimda qayd etildi:</b> Bandlov kodi: <span id="bookingId" class="text-primary fw-bold"></span></div>
+            </div>
+            <div class="step-item">
+                <div class="step-number">2</div>
+                <div class="small"><b>Aloqa:</b> 15 daqiqa ichida operatorimiz qo'ng'iroq qilib ma'lumotlarni tasdiqlaydi.</div>
+            </div>
+            <div class="step-item">
+                <div class="step-number">3</div>
+                <div class="small"><b>SMS-vaucher:</b> Tasdiqlangandan so'ng telefoningizga elektron vaucher yuboriladi.</div>
+            </div>
+        </div>
+
+        <button class="btn btn-dark btn-lg w-100 rounded-pill py-3 fw-bold shadow-sm" onclick="closeSuccess()">
+            <i class="fas fa-home me-2"></i> Asosiy sahifaga qaytish
+        </button>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let currentPricePerNight = 0;
+        let activeRegionId = null;
+
         function filterRegions() {
             let input = document.getElementById('regionSearch').value.toLowerCase();
-            let items = document.querySelectorAll('.region-item');
-            let found = false;
-            items.forEach(item => {
-                if (item.getAttribute('data-name').includes(input)) {
-                    item.style.display = "";
-                    found = true;
-                } else {
-                    item.style.display = "none";
-                }
+            document.querySelectorAll('.region-item').forEach(item => {
+                item.style.display = item.getAttribute('data-name').includes(input) ? "" : "none";
             });
-            document.getElementById('noRegion').classList.toggle('hidden', found);
         }
 
-        // Viloyatni ochish va unga tegishli mehmonxonalarni filtrlash
+        function filterHotels() {
+            let input = document.getElementById('hotelSearch').value.toLowerCase();
+            document.querySelectorAll('.h-item').forEach(hotel => {
+                if (hotel.getAttribute('data-rid') === activeRegionId) {
+                    let hotelName = hotel.getAttribute('data-hname');
+                    hotel.classList.toggle('hidden', !hotelName.includes(input));
+                }
+            });
+        }
+
         function openHotels(regionId, regionName) {
+            activeRegionId = regionId;
             document.getElementById('rSection').classList.add('hidden');
             document.getElementById('searchWrapper').classList.add('hidden');
             document.getElementById('hSection').classList.remove('hidden');
-            document.getElementById('hTitle').innerText = regionName + " - Barcha Maskunlar";
-
-            let hotels = document.querySelectorAll('.h-item');
-            hotels.forEach(hotel => {
-                if (hotel.getAttribute('data-rid') === regionId) {
-                    hotel.classList.remove('hidden');
-                } else {
-                    hotel.classList.add('hidden');
-                }
+            document.getElementById('hTitle').innerText = regionName + " maskunlari";
+            document.getElementById('hotelSearch').value = "";
+            document.querySelectorAll('.h-item').forEach(hotel => {
+                hotel.classList.toggle('hidden', hotel.getAttribute('data-rid') !== regionId);
             });
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function closeHotels() {
+            activeRegionId = null;
             document.getElementById('rSection').classList.remove('hidden');
             document.getElementById('searchWrapper').classList.remove('hidden');
             document.getElementById('hSection').classList.add('hidden');
+            document.getElementById('regionSearch').value = "";
+            filterRegions();
         }
 
-        // Bron qilish oynasini ochish
+        function openHotelDetails(hotelId) {
+            const dataDiv = document.getElementById('data-' + hotelId);
+            const name = dataDiv.getAttribute('data-name');
+            const price = dataDiv.getAttribute('data-price');
+            const lat = dataDiv.getAttribute('data-lat');
+            const lng = dataDiv.getAttribute('data-lng');
+
+            document.getElementById('detailName').innerText = name;
+            document.getElementById('detailPrice').innerText = "$" + price;
+            document.getElementById('detailDesc').innerHTML = dataDiv.querySelector('.desc-content').innerHTML;
+            document.getElementById('modalAmenities').innerHTML = dataDiv.querySelector('.amenities-list').innerHTML;
+            document.getElementById('detailMapLink').href = `https://www.google.com/maps?q=${lat},${lng}`;
+
+            let imgHtml = '';
+            dataDiv.querySelectorAll('.img-list span').forEach((img, index) => {
+                let imgSrc = img.innerText.trim();
+                if (imgSrc) {
+                    imgHtml += `<div class="carousel-item ${index === 0 ? 'active' : ''}">
+                                    <img src="${imgSrc}" class="d-block w-100 modal-carousel-img" onerror="this.src='https://via.placeholder.com/800x450?text=Rasm+Mavjud+Emas'">
+                                </div>`;
+                }
+            });
+            document.getElementById('modalImages').innerHTML = imgHtml || `<div class="carousel-item active"><img src="https://via.placeholder.com/800x450?text=Rasm+Yo'q" class="d-block w-100 modal-carousel-img"></div>`;
+
+            document.getElementById('bookBtn').onclick = () => {
+                bootstrap.Modal.getOrCreateInstance(document.getElementById('detailModal')).hide();
+                openBooking(name, price);
+            };
+            new bootstrap.Modal(document.getElementById('detailModal')).show();
+        }
+
+        // --- YANGILANGAN OPENBOOKING (Sana cheklovi bilan) ---
         function openBooking(hotelName, price) {
             currentPricePerNight = parseFloat(price);
             document.getElementById('modalHotelName').innerText = hotelName;
-            document.getElementById('unitPriceDisplay').innerText = "$" + price;
 
-            // Formani tozalash
-            document.getElementById('checkIn').value = "";
-            document.getElementById('checkOut').value = "";
+            // Bugungi sanani olish va inputlarga min qiymat berish
+            const bugun = new Date().toISOString().split('T')[0];
+            const checkInInput = document.getElementById('checkIn');
+            const checkOutInput = document.getElementById('checkOut');
+
+            checkInInput.setAttribute('min', bugun);
+            checkOutInput.setAttribute('min', bugun);
+
+            checkInInput.value = "";
+            checkOutInput.value = "";
             document.getElementById('resultBox').classList.add('hidden');
-
             new bootstrap.Modal(document.getElementById('bookingModal')).show();
         }
 
-        // Narxni real vaqtda hisoblash
+        // --- YANGILANGAN CALCULATE (Mantiqiy tekshiruvlar bilan) ---
         function calculate() {
-            let start = new Date(document.getElementById('checkIn').value);
-            let end = new Date(document.getElementById('checkOut').value);
-            let guests = parseInt(document.getElementById('guestCount').value);
+            const checkInInput = document.getElementById('checkIn');
+            const checkOutInput = document.getElementById('checkOut');
 
-            if (start && end && end > start) {
-                let diffTime = Math.abs(end - start);
-                let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            let start = new Date(checkInInput.value);
+            let end = new Date(checkOutInput.value);
+            const bugun = new Date();
+            bugun.setHours(0,0,0,0);
 
-                let total = diffDays * currentPricePerNight * guests;
+            // Kelish sanasini tekshirish
+            if (checkInInput.value && start < bugun) {
+                alert("Kelish sanasi bugundan oldin bo'lishi mumkin emas!");
+                checkInInput.value = "";
+                document.getElementById('resultBox').classList.add('hidden');
+                return;
+            }
 
-                document.getElementById('daysSpan').innerText = diffDays;
-                document.getElementById('totalSpan').innerText = "$" + total.toLocaleString();
+            // Ketish sanasining minimal qiymatini kelish sanasiga qarab yangilash
+            if (checkInInput.value) {
+                checkOutInput.setAttribute('min', checkInInput.value);
+            }
+
+            // Jami kunlarni hisoblash
+            if (checkInInput.value && checkOutInput.value) {
+                if (end <= start) {
+                    alert("Ketish sanasi kelish sanasidan keyin bo'lishi shart!");
+                    checkOutInput.value = "";
+                    document.getElementById('resultBox').classList.add('hidden');
+                    return;
+                }
+
+                let diffDays = Math.ceil(Math.abs(end - start) / (1000 * 60 * 60 * 24));
+                document.getElementById('nightCount').innerText = diffDays + " kecha";
+                document.getElementById('totalSpan').innerText = "$" + (diffDays * currentPricePerNight).toLocaleString();
                 document.getElementById('resultBox').classList.remove('hidden');
             } else {
                 document.getElementById('resultBox').classList.add('hidden');
             }
         }
 
-        // Tasdiqlash
         function confirmBooking() {
-            const total = document.getElementById('totalSpan').innerText;
-            const hotel = document.getElementById('modalHotelName').innerText;
-            if (total !== "$0" && !document.getElementById('resultBox').classList.contains('hidden')) {
-                alert(`Tabriklaymiz!\n\n${hotel} uchun bandlovingiz qabul qilindi.\nUmumiy summa: ${total}\nOperatorimiz tez orada bog'lanadi.`);
-                bootstrap.Modal.getInstance(document.getElementById('bookingModal')).hide();
-            } else {
-                alert("Iltimos, kelish va ketish sanalarini to'g'ri kiriting!");
+            const checkIn = document.getElementById('checkIn').value;
+            const checkOut = document.getElementById('checkOut').value;
+
+            if(!checkIn || !checkOut) {
+                alert("Iltimos, barcha sanalarni kiriting!");
+                return;
             }
+
+            bootstrap.Modal.getInstance(document.getElementById('bookingModal')).hide();
+
+            // Bron kodini yaratish
+            document.getElementById('bookingId').innerText = "#ES-" + Math.floor(1000 + Math.random() * 9000);
+
+            // Muvaffaqiyat oynasini ko'rsatish
+            document.getElementById('successOverlay').classList.remove('hidden');
+            setTimeout(() => {
+                document.getElementById('successCard').classList.add('active');
+            }, 100);
+        }
+
+        function closeSuccess() {
+            document.getElementById('successCard').classList.remove('active');
+            setTimeout(() => {
+                document.getElementById('successOverlay').classList.add('hidden');
+                window.location.reload();
+            }, 500);
         }
     </script>
 </body>

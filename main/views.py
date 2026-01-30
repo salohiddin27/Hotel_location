@@ -60,7 +60,6 @@ class DistrictViewSet(viewsets.ModelViewSet):
     OpenApiParameter("district_pk", type=int, location=OpenApiParameter.PATH)
 ])
 class CommentViewSet(viewsets.ModelViewSet):
-    # ...class CommentViewSet(viewsets.ModelViewSet):
     queryset = DistrictComment.objects.all()
     serializer_class = DistrictCommentSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
@@ -100,5 +99,4 @@ from .models import Region, District
 def home(request):
     regions = Region.objects.all()
     districts = District.objects.filter(is_active=True).prefetch_related('images', 'amenities')
-    # prefetch_related('images') - bu har bir hotelning rasmlarini bazadan tezroq olib keladi
     return render(request, 'index.html', {'regions': regions, 'districts': districts})

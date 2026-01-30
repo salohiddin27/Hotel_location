@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 from django.db import models
-from rest_framework.exceptions import ValidationError
+from django.utils import timezone
 
 
 class Region(models.Model):
@@ -43,6 +44,19 @@ class Booking(models.Model):
     check_out = models.DateField()
     guests = models.PositiveSmallIntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def clean(self):
+        bugun = timezone.now().date()
+
+        if self.check_in < bugun:
+            raise ValidationError({'check_in': "Xato! O'tib ketgan sanani bron qilish mumkin emas."})
+
+        if self.check_out <= self.check_in:
+            raise ValidationError({'check_out': "Ketish sanasi Kelish sanasidan katta bolishi kerak."})
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        super().save(*args, **kwargs)
 
 
 class DistrictComment(models.Model):
