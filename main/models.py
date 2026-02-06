@@ -9,6 +9,7 @@ class Region(models.Model):
     image = models.ImageField(upload_to='regions/')
     location = models.URLField(max_length=200)
 
+
     def __str__(self):
         return self.name
 
@@ -37,6 +38,15 @@ class District(models.Model):
         return self.name
 
 
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    email_confirmed = models.BooleanField(default=False)
+    otp_code = models.CharField(max_length=5, blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.user.username} profile"
+
+
 class Booking(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     district = models.ForeignKey(District, on_delete=models.CASCADE)
@@ -46,13 +56,17 @@ class Booking(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def clean(self):
-        bugun = timezone.now().date()
+        today = timezone.now().date()
 
-        if self.check_in < bugun:
-            raise ValidationError({'check_in': "Xato! O'tib ketgan sanani bron qilish mumkin emas."})
+        if self.check_in and self.check_in < today:
+            raise ValidationError({
+                "check_in": f"Check-in time can't be ago time. today: {today}"
+            })
 
-        if self.check_out <= self.check_in:
-            raise ValidationError({'check_out': "Ketish sanasi Kelish sanasidan katta bolishi kerak."})
+        if self.check_in and self.check_out and self.check_out <= self.check_in:
+            raise ValidationError({
+                "check_out": "Check-out sanasi check-in dan keyin bo'lishi shart!"
+            })
 
     def save(self, *args, **kwargs):
         self.full_clean()
@@ -98,5 +112,4 @@ class Description(models.Model):
 
     def __str__(self):
         return f"{self.key}: {self.value}"
-
 

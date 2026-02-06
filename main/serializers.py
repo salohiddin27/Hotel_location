@@ -1,6 +1,29 @@
+from django.utils import timezone
 from rest_framework import serializers
 
-from .models import Region, District, DistrictComment, Description, DistrictImage, Amenity
+from .models import Region, District, DistrictComment, Description, DistrictImage, Amenity, Booking
+
+
+class BookingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Booking
+        fields = ['id', 'user', 'district', 'check_in', 'check_out', 'guests', 'created_at']
+        read_only_fields = ['user', 'created_at']
+
+    def validate(self, data):
+        today = timezone.now().date()
+
+        if data.get('check_in') and data['check_in'] < today:
+            raise serializers.ValidationError({
+                "check_in": "You can't bron ago time!"
+            })
+
+        if data.get('check_in') and data.get('check_out'):
+            if data['check_out'] <= data['check_in']:
+                raise serializers.ValidationError({
+                    "check_out": "check-out time must be after check-in time"
+                })
+        return data
 
 
 class DescriptionSerializer(serializers.ModelSerializer):
@@ -87,5 +110,3 @@ class RegionDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Region
         fields = ['id', 'name', 'location', 'image', 'districts']
-
-

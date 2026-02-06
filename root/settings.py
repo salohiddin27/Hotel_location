@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -35,16 +36,17 @@ INSTALLED_APPS = [
     'django_filters',
     'drf_spectacular',
     'corsheaders',
+    'rest_framework.authtoken',
 ]
 
 # -------------------------------
 # Middleware
 # -------------------------------
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',  # Dizayn chiqishi uchun muhim
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -129,7 +131,14 @@ MEDIA_ROOT = BASE_DIR / "media"
 # Django REST Framework & Spectacular
 # -------------------------------
 REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10,
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication', # Oddiy token uchun
+        'rest_framework.authentication.SessionAuthentication', # Brauzer uchun
+    ],
+
 }
 
 SPECTACULAR_SETTINGS = {
@@ -141,6 +150,20 @@ SPECTACULAR_SETTINGS = {
 # -------------------------------
 # CSRF Trusted Origins (Railway uchun)
 # -------------------------------
-CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED_ORIGINS', "").split(",")
-if not CSRF_TRUSTED_ORIGINS or CSRF_TRUSTED_ORIGINS == [""]:
-    CSRF_TRUSTED_ORIGINS = ['https://hotellocation-production.up.railway.app']
+CSRF_TRUSTED_ORIGINS = [
+    'https://hotellocation-production.up.railway.app',
+    'http://127.0.0.1:8000',
+    'http://localhost:8000'
+]
+LOGIN_URL = '/'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = int(os.getenv('EMAIL_P', 587))
+EMAIL_USE_TLS = True
+# Faqatgina asosiy email manzilingizni qoldiring:
+EMAIL_HOST_USER = os.getenv('EMAIL')
+# Bu yerda siz yaratgan 16 xonali "App Password" bo'lishi shart:
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST')

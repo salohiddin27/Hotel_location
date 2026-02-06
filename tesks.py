@@ -28,3 +28,6 @@
 # print(f"{c} ta raqam bor ")
 # print(f"{h} ta harf bor ")
 # print(f"{b} ta belgi bor ")
+
+
+
