@@ -1,13 +1,13 @@
 from django.utils import timezone
 from rest_framework import serializers
 
-from .models import Region, District, DistrictComment, Description, DistrictImage, Amenity, Booking
+from .models import Region, Hotel, HotelComment, Description, HotelImage, Amenity, Booking
 
 
 class BookingSerializer(serializers.ModelSerializer):
     class Meta:
         model = Booking
-        fields = ['id', 'user', 'district', 'check_in', 'check_out', 'guests', 'created_at']
+        fields = ['id', 'user', 'hotel', 'check_in', 'check_out', 'guests', 'created_at']
         read_only_fields = ['user', 'created_at']
 
     def validate(self, data):
@@ -32,17 +32,17 @@ class DescriptionSerializer(serializers.ModelSerializer):
         fields = ['id', 'key', 'value']
 
 
-class DistrictImageSerializer(serializers.ModelSerializer):
+class HotelImageSerializer(serializers.ModelSerializer):
     class Meta:
-        model = DistrictImage
+        model = HotelImage
         fields = ['id', 'image']
 
 
-class DistrictCommentSerializer(serializers.ModelSerializer):
+class HotelCommentSerializer(serializers.ModelSerializer):
     user = serializers.StringRelatedField(read_only=True)
 
     class Meta:
-        model = DistrictComment
+        model = HotelComment
         fields = ['id', 'user', 'text', 'rating', 'created_at']
 
 
@@ -52,12 +52,12 @@ class AmenitySerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'icon']
 
 
-class DistrictListSerializer(serializers.ModelSerializer):
+class HotelListSerializer(serializers.ModelSerializer):
     amenities = AmenitySerializer(many=True, read_only=True)
-    images = DistrictImageSerializer(many=True, read_only=True)
+    images = HotelImageSerializer(many=True, read_only=True)
 
     class Meta:
-        model = District
+        model = Hotel
         fields = [
             'id',
             'name',
@@ -73,14 +73,14 @@ class DistrictListSerializer(serializers.ModelSerializer):
         ]
 
 
-class DistrictDetailSerializer(serializers.ModelSerializer):
+class HotelDetailSerializer(serializers.ModelSerializer):
     descriptions = DescriptionSerializer(many=True, read_only=True)
-    comments = DistrictCommentSerializer(many=True, read_only=True)
+    comments = HotelCommentSerializer(many=True, read_only=True)
     amenities = AmenitySerializer(many=True, read_only=True)
-    images = DistrictImageSerializer(many=True, read_only=True)
+    images = HotelImageSerializer(many=True, read_only=True)
 
     class Meta:
-        model = District
+        model = Hotel
         fields = [
             'id',
             'name',
@@ -105,8 +105,8 @@ class RegionListSerializer(serializers.ModelSerializer):
 
 
 class RegionDetailSerializer(serializers.ModelSerializer):
-    districts = DistrictListSerializer(many=True, read_only=True)
+    hotels = HotelListSerializer(many=True, read_only=True)
 
     class Meta:
         model = Region
-        fields = ['id', 'name', 'location', 'image', 'districts']
+        fields = ['id', 'name', 'location', 'image', 'hotels']

@@ -5,21 +5,12 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# -------------------------------
-# Base directory
-# -------------------------------
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# -------------------------------
-# Security
-# -------------------------------
 SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-default-key')
 DEBUG = os.getenv('DEBUG') == 'True'
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', "").split(",")
 
-# -------------------------------
-# Applications
-# -------------------------------
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -39,13 +30,10 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
 ]
 
-# -------------------------------
-# Middleware
-# -------------------------------
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',  # Dizayn chiqishi uchun muhim
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -56,15 +44,9 @@ MIDDLEWARE = [
 
 CORS_ALLOW_ALL_ORIGINS = True
 
-# -------------------------------
-# URLs and WSGI
-# -------------------------------
 ROOT_URLCONF = 'root.urls'
 WSGI_APPLICATION = 'root.wsgi.application'
 
-# -------------------------------
-# Templates
-# -------------------------------
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -80,9 +62,6 @@ TEMPLATES = [
     },
 ]
 
-# -------------------------------
-# Database (PostgreSQL)
-# -------------------------------
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -94,9 +73,6 @@ DATABASES = {
     }
 }
 
-# -------------------------------
-# Password validation
-# -------------------------------
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
     {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
@@ -104,39 +80,26 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
-# -------------------------------
-# Internationalization
-# -------------------------------
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'Asia/Tashkent'
 USE_I18N = True
 USE_TZ = True
 
-# -------------------------------
-# Static files (Whitenoise sozlamalari bilan)
-# -------------------------------
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
-# Productionda dizayn fayllarini siqib ko'rsatish
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
-# -------------------------------
-# Media files
-# -------------------------------
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / "media"
 
-# -------------------------------
-# Django REST Framework & Spectacular
-# -------------------------------
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10,
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.TokenAuthentication', # Oddiy token uchun
-        'rest_framework.authentication.SessionAuthentication', # Brauzer uchun
+        'rest_framework.authentication.TokenAuthentication',  # Oddiy token uchun
+        'rest_framework.authentication.SessionAuthentication',  # Brauzer uchun
     ],
 
 }
@@ -147,9 +110,8 @@ SPECTACULAR_SETTINGS = {
     'VERSION': '1.0.0',
 }
 
-# -------------------------------
 # CSRF Trusted Origins (Railway uchun)
-# -------------------------------
+
 CSRF_TRUSTED_ORIGINS = [
     'https://hotellocation-production.up.railway.app',
     'http://127.0.0.1:8000',
@@ -163,7 +125,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = int(os.getenv('EMAIL_P', 587))
 EMAIL_USE_TLS = True
-# Faqatgina asosiy email manzilingizni qoldiring:
+
 EMAIL_HOST_USER = os.getenv('EMAIL')
-# Bu yerda siz yaratgan 16 xonali "App Password" bo'lishi shart:
+
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST')

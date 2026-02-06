@@ -14,12 +14,12 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticate
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .models import Region, District, DistrictComment, Description, Booking, Profile
+from .models import Region, Hotel, HotelComment, Description, Booking, Profile
 from .serializers import (
     DescriptionSerializer,
-    DistrictCommentSerializer,
-    DistrictListSerializer,
-    DistrictDetailSerializer,
+    HotelCommentSerializer,
+    HotelListSerializer,
+    HotelDetailSerializer,
     RegionListSerializer,
     RegionDetailSerializer, BookingSerializer,
 )
@@ -31,13 +31,14 @@ class RegionViewSet(viewsets.ModelViewSet):
     filter_backends = [SearchFilter, DjangoFilterBackend]
     filterset_fields = ['id', 'name', 'location']
     search_fields = ['name']
+    pagination_class = None
 
     def get_queryset(self):
         return Region.objects.prefetch_related(
-            'districts__descriptions',
-            'districts__comments',
-            'districts__amenities',
-            'districts__images',
+            'hotels__descriptions',
+            'hotels__comments',
+            'hotels__amenities',
+            'hotels__images',
         )
 
     def get_serializer_class(self):
@@ -47,9 +48,9 @@ class RegionViewSet(viewsets.ModelViewSet):
 
 
 @extend_schema(parameters=[OpenApiParameter("region_pk", type=int, location=OpenApiParameter.PATH)])
-class DistrictViewSet(viewsets.ModelViewSet):
-    queryset = District.objects.all()
-    serializer_class = DistrictDetailSerializer
+class HotelViewSet(viewsets.ModelViewSet):
+    queryset = Hotel.objects.all()
+    serializer_class = HotelDetailSerializer
     filter_backends = [SearchFilter, DjangoFilterBackend]
     filterset_fields = ['id', 'name', 'region']
     search_fields = ['name']
@@ -63,24 +64,24 @@ class DistrictViewSet(viewsets.ModelViewSet):
 
     def get_serializer_class(self):
         if self.action == 'retrieve':
-            return DistrictDetailSerializer
-        return DistrictListSerializer
+            return HotelDetailSerializer
+        return HotelListSerializer
 
 
 @extend_schema(parameters=[
     OpenApiParameter("region_pk", type=int, location=OpenApiParameter.PATH),
-    OpenApiParameter("district_pk", type=int, location=OpenApiParameter.PATH)
+    OpenApiParameter("hotel_pk", type=int, location=OpenApiParameter.PATH)
 ])
 class CommentViewSet(viewsets.ModelViewSet):
-    queryset = DistrictComment.objects.all()
-    serializer_class = DistrictCommentSerializer
+    queryset = HotelComment.objects.all()
+    serializer_class = HotelCommentSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
 
     def get_queryset(self):
-        district_pk = self.kwargs.get("district_pk")
+        hotel_pk = self.kwargs.get("hotel_pk")
         qs = super().get_queryset()
-        if district_pk:
-            qs = qs.filter(district_id=district_pk)
+        if hotel_pk:
+            qs = qs.filter(hotel_pk=hotel_pk)
         return qs
 
     def perform_create(self, serializer):
@@ -90,7 +91,7 @@ class CommentViewSet(viewsets.ModelViewSet):
 @extend_schema(parameters=[
     OpenApiParameter("region_pk", type=int, location=OpenApiParameter.PATH),
 
-    OpenApiParameter("district_pk", type=int, location=OpenApiParameter.PATH),
+    OpenApiParameter("hotel_pk", type=int, location=OpenApiParameter.PATH),
 ])
 class DescriptionViewSet(viewsets.ModelViewSet):
     queryset = Description.objects.all()
@@ -98,16 +99,16 @@ class DescriptionViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAdminUser]
 
     def get_queryset(self):
-        district_pk = self.kwargs.get("district_pk")
+        hotel_pk = self.kwargs.get("hotel_pk")
         qs = super().get_queryset()
-        if district_pk:
-            qs = qs.filter(district_id=district_pk)
+        if hotel_pk:
+            qs = qs.filter(district_id=hotel_pk)
         return qs
 
 
 @extend_schema(parameters=[
     OpenApiParameter("region_pk", type=int, location=OpenApiParameter.PATH),
-    OpenApiParameter("district_pk", type=int, location=OpenApiParameter.PATH),
+    OpenApiParameter("hotel_pk", type=int, location=OpenApiParameter.PATH),
 ])
 class BookingViewSet(viewsets.ModelViewSet):
     queryset = Booking.objects.all()
@@ -115,16 +116,16 @@ class BookingViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        district_pk = self.kwargs.get("district_pk")
-        if district_pk:
-            return self.queryset.filter(district_id=district_pk)
+        hotel_pk = self.kwargs.get("hotel_pk")
+        if hotel_pk:
+            return self.queryset.filter(district_id=hotel_pk)
         return self.queryset
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
 
-@method_decorator(csrf_exempt, name='dispatch')  # Shuni qo'shing
+@method_decorator(csrf_exempt, name='dispatch')
 class SendOTPView(APIView):
     authentication_classes = []
     permission_classes = [permissions.AllowAny]
@@ -186,8 +187,8 @@ class VerifyOTPView(APIView):
                 # Bir marta ishlatilgan kodni xavfsizlik uchun bazadan o'chirish
                 profile.otp_code = None
                 profile.email_confirmed = True
+
                 profile.save()
-                # Frontendga Login muvaffaqiyatli bo'lganini va tokenni qaytarish
 
                 return Response({
                     "token": token.key,
@@ -198,12 +199,3 @@ class VerifyOTPView(APIView):
         except User.DoesNotExist:
             return Response({"error": "Foydalanuvchi topilmadi "}, status=status.HTTP_404_NOT_FOUND)
 
-
-from django.shortcuts import render
-from .models import Region, District
-
-
-def home(request):
-    regions = Region.objects.all()
-    districts = District.objects.filter(is_active=True).prefetch_related('images', 'amenities')
-    return render(request, 'index.html', {'regions': regions, 'districts': districts})

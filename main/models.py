@@ -22,8 +22,8 @@ class Amenity(models.Model):
         return self.name
 
 
-class District(models.Model):
-    region = models.ForeignKey(Region, on_delete=models.CASCADE, related_name='districts')
+class Hotel(models.Model):
+    region = models.ForeignKey(Region, on_delete=models.CASCADE, related_name='hotels')
     name = models.CharField(max_length=100)
     price_per_night = models.PositiveIntegerField(default=0)
     latitude = models.DecimalField(max_digits=9, decimal_places=6, default=0)
@@ -49,7 +49,7 @@ class Profile(models.Model):
 
 class Booking(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    district = models.ForeignKey(District, on_delete=models.CASCADE)
+    hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE)
     check_in = models.DateField()
     check_out = models.DateField()
     guests = models.PositiveSmallIntegerField()
@@ -73,8 +73,8 @@ class Booking(models.Model):
         super().save(*args, **kwargs)
 
 
-class DistrictComment(models.Model):
-    district = models.ForeignKey(District, on_delete=models.CASCADE, related_name='comments')
+class HotelComment(models.Model):
+    hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE, related_name='comments')
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     text = models.TextField(null=True, blank=True)
     rating = models.IntegerField(null=True, blank=True)
@@ -85,28 +85,28 @@ class DistrictComment(models.Model):
             raise ValidationError("Rating 1 da  5 gacha bolishi kerak.")
         super().save(*args, **kwargs)
 
-        ratings = self.district.comments.exclude(rating__isnull=True)
+        ratings = self.hotel.comments.exclude(rating__isnull=True)
         if ratings.exists():
-            self.district.average_rating = (sum(r.rating for r in ratings) / ratings.count())
+            self.hotel.average_rating = (sum(r.rating for r in ratings) / ratings.count())
         else:
-            self.district.average_rating = 0
+            self.hotel.average_rating = 0
 
-        self.district.save()
+        self.hotel.save()
 
     def __str__(self):
         return f"{self.user} - {self.rating}"
 
 
-class DistrictImage(models.Model):
-    district = models.ForeignKey(District, on_delete=models.CASCADE, related_name='images')
+class HotelImage(models.Model):
+    hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE, related_name='images')
     image = models.ImageField(upload_to='districts/gallery/')
 
     def __str__(self):
-        return f"Image of {self.district.name}"
+        return f"Image of {self.hotel.name}"
 
 
 class Description(models.Model):
-    district = models.ForeignKey(District, on_delete=models.CASCADE, null=True, blank=True, related_name='descriptions')
+    hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE, null=True, blank=True, related_name='descriptions')
     key = models.CharField(max_length=350)
     value = models.TextField()
 

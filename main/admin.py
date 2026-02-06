@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import District, Region, DistrictComment, Description, Booking, DistrictImage, Amenity
+from .models import Hotel, Region, HotelComment, Description, Booking, HotelImage, Amenity
 
 
 @admin.register(Region)
@@ -10,8 +10,8 @@ class RegionAdmin(admin.ModelAdmin):
     list_per_page = 20
 
 
-@admin.register(District)
-class DistrictAdmin(admin.ModelAdmin):
+@admin.register(Hotel)
+class HotelAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'region', 'price_per_night', 'average_rating', 'is_active')
     list_filter = ('region', 'is_active', 'amenities')
     search_fields = ('name', 'region__name')
@@ -27,33 +27,33 @@ class AmenityAdmin(admin.ModelAdmin):
     list_per_page = 20
 
 
-@admin.register(DistrictComment)
+@admin.register(HotelComment)
 class DistrictCommentAdmin(admin.ModelAdmin):
-    list_display = ('id', 'user', 'district', 'rating', 'created_at')
-    list_filter = ('district', 'rating', 'created_at')
-    search_fields = ('user__username', 'district__name', 'text')
+    list_display = ('id', 'user', 'hotel', 'rating', 'created_at')
+    list_filter = ('hotel', 'rating', 'created_at')
+    search_fields = ('user__username', 'hotel__name', 'text')
     ordering = ('-created_at',)
     list_per_page = 20
 
 
 @admin.register(Description)
 class DescriptionAdmin(admin.ModelAdmin):
-    list_display = ('id', 'district', 'key', 'value')
-    search_fields = ('district__name', 'key', 'value')
+    list_display = ('id', 'hotel', 'key', 'value')
+    search_fields = ('hotel__name', 'key', 'value')
     list_per_page = 20
 
 
 @admin.register(Booking)
 class BookingAdmin(admin.ModelAdmin):
-    list_display = ('id', 'user', 'district', 'check_in', 'check_out', 'guests', 'created_at')
-    list_filter = ('check_in', 'check_out', 'district')
-    search_fields = ('user__username', 'district__name')
+    list_display = ('id', 'user', 'hotel', 'check_in', 'check_out', 'guests', 'created_at')
+    list_filter = ('check_in', 'check_out', 'hotel')
+    search_fields = ('user__username', 'hotel__name')
     ordering = ('-created_at',)
     list_per_page = 20
 
 
-@admin.register(DistrictImage)
+@admin.register(HotelImage)
 class DistrictImageAdmin(admin.ModelAdmin):
-    list_display = ('id', 'district', 'image')
-    search_fields = ('district__name',)
+    list_display = ('id', 'hotel', 'image')
+    search_fields = ('hotel__name',)
     list_per_page = 20
