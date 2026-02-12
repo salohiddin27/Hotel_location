@@ -7,7 +7,7 @@ from .models import Region, Hotel, HotelComment, Description, HotelImage, Amenit
 class BookingSerializer(serializers.ModelSerializer):
     class Meta:
         model = Booking
-        fields = ['id', 'user', 'hotel', 'check_in', 'check_out', 'guests', 'created_at']
+        fields = ['id', 'user',  'check_in', 'check_out', 'guests', 'created_at']
         read_only_fields = ['user', 'created_at']
 
     def validate(self, data):
@@ -56,6 +56,7 @@ class HotelListSerializer(serializers.ModelSerializer):
     amenities = AmenitySerializer(many=True, read_only=True)
     images = HotelImageSerializer(many=True, read_only=True)
 
+
     class Meta:
         model = Hotel
         fields = [
@@ -69,7 +70,7 @@ class HotelListSerializer(serializers.ModelSerializer):
             'created_at',
             'updated_at',
             'amenities',
-            'images'
+            'images',
         ]
 
 

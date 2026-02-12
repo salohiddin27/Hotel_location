@@ -22,7 +22,7 @@ for i in range(160):
 # Ekran sozlamalari
 bgcolor("black")
 speed(0) # Eng tez tezlik
-color("red")
+color("yellow")
 pensize(2)
 
 def heart(n):

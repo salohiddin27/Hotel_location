@@ -2,9 +2,8 @@ from django.urls import path, include
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 from rest_framework_nested import routers
 
-from .views import RegionViewSet, HotelViewSet, CommentViewSet, DescriptionViewSet, BookingViewSet, SendOTPView, \
-    VerifyOTPView
-
+from .views import RegionViewSet, HotelViewSet, CommentViewSet, DescriptionViewSet
+from .login import BookingViewSet, SendOTPView, VerifyOTPView
 router = routers.SimpleRouter()
 router.register(r'regions', RegionViewSet, basename='regions')
 
