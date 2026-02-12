@@ -9,7 +9,6 @@ class Region(models.Model):
     image = models.ImageField(upload_to='regions/')
     location = models.URLField(max_length=200)
 
-
     def __str__(self):
         return self.name
 
@@ -112,4 +111,3 @@ class Description(models.Model):
 
     def __str__(self):
         return f"{self.key}: {self.value}"
-

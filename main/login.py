@@ -107,4 +107,3 @@ class VerifyOTPView(APIView):
                 return Response({"error": "Kod noto'g'ri"}, status=status.HTTP_400_BAD_REQUEST)
         except User.DoesNotExist:
             return Response({"error": "Foydalanuvchi topilmadi "}, status=status.HTTP_404_NOT_FOUND)
-

@@ -50,7 +50,7 @@ class HotelViewSet(viewsets.ModelViewSet):
         qs = super().get_queryset()
         if region_pk:
             qs = qs.filter(region_id=region_pk)
-        return qs.prefetch_related('descriptions', 'comments', 'amenities', 'images',)
+        return qs.prefetch_related('descriptions', 'comments', 'amenities', 'images', )
 
     def get_serializer_class(self):
         if self.action == 'retrieve':
@@ -94,5 +94,3 @@ class DescriptionViewSet(viewsets.ModelViewSet):
         if hotel_pk:
             qs = qs.filter(district_id=hotel_pk)
         return qs
-
-
